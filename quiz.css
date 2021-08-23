@@ -1,1 +1,24 @@
-/* No CSS *//*# sourceMappingURL=quiz.css.map */
+.quiz {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+  position: fixed;
+  width: 100%;
+  height: 750px;
+  max-width: 1150px;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  border: 2px solid #414141;
+}
+
+.quiz__left {
+  border: 1px solid #bd6969;
+}
+
+.quiz__right {
+  border: 1px solid #55ffdd;
+}
+/*# sourceMappingURL=quiz.css.map */
