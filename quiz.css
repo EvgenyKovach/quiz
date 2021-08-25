@@ -1,24 +1,94 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400500600700&display=swap");
 .quiz {
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-columns: 1fr 1fr;
-      grid-template-columns: 1fr 1fr;
   position: fixed;
   width: 100%;
-  height: 750px;
-  max-width: 1150px;
+  height: 650px;
+  max-width: 1200px;
   top: 50%;
   left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
-  border: 2px solid #414141;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  font-family: "Montserrat", sans-serif;
 }
-
-.quiz__left {
-  border: 1px solid #bd6969;
+.quiz__container {
+  display: grid;
+  width: 100%;
+  height: 100%;
 }
-
+.quiz__container--promo {
+  grid-template-columns: 58% 42%;
+}
+.quiz__container--question {
+  grid-template-columns: 80% 20%;
+}
+.quiz__left-promo {
+  background: url("img/img.jpg") left/cover no-repeat;
+}
+.quiz__left-question {
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  padding-bottom: 25px;
+}
+.quiz__left-question-progress {
+  margin-top: auto;
+}
+.quiz__left-question-text {
+  font-size: 28px;
+  color: #363636;
+}
 .quiz__right {
-  border: 1px solid #55ffdd;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100%;
+  padding: 1rem 2rem;
+  margin-top: -35px;
 }
-/*# sourceMappingURL=quiz.css.map */
+.quiz__right-question {
+  padding: 1rem 1.2rem 0;
+  padding-bottom: 15px;
+  background: #F7F7F7;
+}
+.quiz__right-title {
+  position: relative;
+  margin-bottom: 1rem;
+  color: #363636;
+  font-size: 30px;
+  font-weight: 600;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.2;
+  letter-spacing: normal;
+}
+.quiz__right-title::before {
+  position: absolute;
+  content: "";
+  top: -20px;
+  left: 0;
+  width: 38px;
+  height: 3px;
+  background: #363636;
+}
+.quiz__right-btn-start {
+  min-height: 55px;
+  padding: 12px 30px;
+  margin-top: 1rem;
+  border-radius: 40px;
+  font-size: 18px !important;
+  background-color: #3db92c;
+  color: #fff;
+  border-color: transparent;
+  cursor: pointer;
+}
+.quiz__right-btn-start svg {
+  width: 20px;
+  height: 20px;
+  transform: translateY(3px);
+  fill: #fff;
+}
+
+.quiz-page {
+  display: none;
+}/*# sourceMappingURL=quiz.css.map */
