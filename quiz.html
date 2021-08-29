@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="quiz.css">
     <title>quiz</title>
 </head>
-<body style='height: 100%; background-color: rgb(197, 197, 197);'>
-    <section class="quiz">
+<body style="height: 100%; background-color: rgb(197, 197, 197);">
+    <section class="quiz js-page" data-page="promo">
         <div class="quiz__container quiz__container--promo">
             <div class="quiz__left-promo">
             </div>
@@ -16,29 +19,58 @@
                 <h3 class="quiz__right-title">
                     Пройди опрос и получи скидку 20% на первый абонемент!
                 </h3>
-                <button class="quiz__right-btn-start">
+                <button class="quiz__right-btn-start shine js-go-questions">
                     <svg viewBox="0 0 24 24" class="mdi-icon mdi-24px"><title>mdi-checkbox-marked-circle-outline</title><path d="M20,12C20,16.42 16.42,20 12,20C7.58,20 4,16.42 4,12C4,7.58 7.58,4 12,4C12.76,4 13.5,4.11 14.2,4.31L15.77,2.74C14.61,2.26 13.34,2 12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12M7.91,10.08L6.5,11.5L11,16L21,6L19.59,4.58L11,13.17L7.91,10.08Z" stroke-width="0" fill-rule="nonzero"></path></svg>
                     Начать
                 </button>
             </div>
         </div>
     </section>
-    <section class='quiz'>
+    <section class="quiz js-page" data-page="questions">
         <div class="quiz__container quiz__container--question">
-        <div class="quiz__left-question">
-            <div class="quiz__left-question-text">
-                Для кого вы ищете занятия?
+        <div class="quiz__left-question js-questions-block">
+            <div class="quiz__left-question-box js-question checkbox" data-question="1">
+                <div class="quiz__left-question-text">
+                    В каком филиале вам будет удобно заниматься?
+                </div>
+                <div class="disclaimer">
+                    <svg viewBox="0 0 24 24" class="mdi-icon mdi-16px"><title>mdi-check-circle</title><path d="M12,2C17.52,2 22,6.48 22,12C22,17.52 17.52,22 12,22C6.48,22 2,17.52 2,12C2,6.48 6.48,2 12,2M11,16.5L18,9.5L16.59,8.09L11,13.67L7.91,10.59L6.5,12L11,16.5Z" stroke-width="0" fill-rule="nonzero"></path></svg>
+                    Можно выбрать несколько вариантов
+                </div>
+                <div class="quiz__left-question-answers">
+                    <div class="quiz__left-question-form">
+                        <label class="quiz__left-question-form-field radio">
+                            <input name="radio" type="radio" value="потому">
+                            Аэровокзальная 4Г
+                            <span></span>
+                        </label>
+                        <label class="quiz__left-question-form-field radio checked">
+                            <input name="radio" type="radio" value="что">
+                            Лесная 2/2
+                            <span></span>
+                        </label>
+                        <label class="quiz__left-question-form-field checkbox">
+                            <input type="checkbox">
+                            Лесная 2/2
+                            <span></span>
+                        </label>
+                    </div>
+                </div>
             </div>
-            <div class="quiz__left-question-answers">
-                <ul>
-                    <li>wer</li>
-                    <li>aqwe</li>
-                </ul>
-            </div>
-            <div class="quiz__left-question-progress">
-                Готово 0%
-                <button>back</button>
-                <button>Далее</button>
+            <div class="quiz__left-question-progress js-question-counter" data-current-question="0">
+                <div class="quiz__left-question-progress-info">
+                    <span class="progress-title">Готово:</span>
+                    <span class="progress-precents">0%</span>
+                    <span class="progress-animation"></span>
+                </div>
+                <div class="quiz__left-question-buttons">
+                    <div class="quiz__left-question-button-back disabled">
+                        <svg viewBox="0 0 24 24" class="mdi-icon mdi-24px"><title>mdi-arrow-right</title><path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" stroke-width="0" fill-rule="nonzero"></path></svg>
+                    </div>
+                    <div class="quiz__left-question-button-next shine">Далее
+                        <svg viewBox="0 0 24 24" class="mdi-icon mdi-24px"><title>mdi-arrow-right</title><path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" stroke-width="0" fill-rule="nonzero"></path></svg>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="quiz__right-question">
@@ -47,11 +79,17 @@
                     Ваша скидка
                 </div>
                 <div class="quiz__right-discount-total">
-                    0%
+                    <span class="discount-precent">0</span> %
+                    <span class="discount-arrow">
+                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" class="arrow"><path d="M5 3.70904e-07L0.757355 4.24265L2.17157 5.65686L5 2.82843L7.82843 5.65686L9.24265 4.24265L5 3.70904e-07Z" fill="#44bc75"></path><path d="M5 4L0.757355 8.24265L2.17157 9.65686L5 6.82843L7.82843 9.65686L9.24265 8.24265L5 4Z" fill="#44bc75"></path></svg>
+                    </span>
                 </div>
             </div>
         </div>
         </div>
     </section>
+    <!-- <section class="quiz js-page" data-page="form"></section> -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="quiz.js"></script>
 </body>
 </html>

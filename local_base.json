@@ -1,0 +1,43 @@
+{
+  "answers": [
+    {
+      "question": "Для кого Вы ищете занятия?", 
+      "answer_type": "radio", 
+      "answers": [
+        {"title": "Для себя"},
+        {"title": "Для своего ребенка"}
+      ],
+      "question_id": 1
+    },
+    {
+      "question": "В каком филиале вам будет удобно заниматься?", 
+      "answer_type": "radio", 
+      "answers": [
+        {"title": "Аэровокзальная 4Г"},
+        {"title": "Лесная 2/2"}
+      ],
+      "question_id": 2
+    },
+    {
+      "question": "Какое направление хотели бы попробовать?", 
+      "answer_type": "checkbox", 
+      "answers": [
+        {"title": "Акробатика"},
+        {"title": "Спортивная гимнастика"},
+        {"title": "Трикинг"},
+        {"title": "Прыжки на батуте"},
+        {"title": "Общая физическая подготовка"}
+      ],
+      "question_id": 3
+    },
+    {
+      "question": "Цель занятий", 
+      "answer_type": "radio", 
+      "answers": [
+        {"title": "Профессиональный спорт"},
+        {"title": "Хобби"}
+      ],
+      "question_id": 4
+    }
+  ]
+}
