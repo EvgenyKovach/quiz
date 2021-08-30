@@ -1,3 +1,18 @@
+const quiz = document.querySelector('.js-quiz')
+const overlay = document.querySelector('.js-quiz-overlay')
+setTimeout(() => {
+  quiz.classList.add('show')
+}, 1500)
+
+overlay.onclick = () => {
+  close_quiz()
+}
+
+function close_quiz() {
+  const quiz = document.querySelector('.js-quiz')
+  quiz.classList.remove('show')
+}
+
 function if_checked() {
   const form_radios = document.querySelectorAll('.quiz__left-question-form-field')
 
@@ -31,10 +46,10 @@ async function get_answers() {
 async function set_answers() {
   const questions_block = document.querySelector('.js-questions-block')
   let template = ''
-  const answers = await get_answers()
-    .then(r => r.answers)
+  const request = await get_answers()
+    .then(r => r)
 
-  answers.forEach(q => {
+  request.answers.forEach(q => {
     if (q.answer_type === 'radio') {
       let labels = ''
       q.answers.forEach(answer => {
@@ -47,7 +62,7 @@ async function set_answers() {
         `
       })
       template += `
-        <div class="quiz__left-question-box js-question checkbox" data-question="${q.question_id}">
+        <div class="quiz__left-question-box js-question checkbox hide" data-question="${q.question_id}">
           <div class="quiz__left-question-text">
               ${q.question}
           </div>
@@ -71,7 +86,7 @@ async function set_answers() {
         `
       })
       template += `
-        <div class="quiz__left-question-box js-question checkbox" data-question="${q.question_id}">
+        <div class="quiz__left-question-box js-question hide checkbox" data-question="${q.question_id}">
           <div class="quiz__left-question-text">
               ${q.question}
           </div>
@@ -90,11 +105,11 @@ async function set_answers() {
   })
 
   template += `
-    <div class="quiz__left-question-progress js-question-counter">
+    <div class="quiz__left-question-progress js-question-counter" data-questions-length="${request.answers.length}" data-discount="${request.discount}">
         <div class="quiz__left-question-progress-info">
             <span class="progress-title">Готово:</span>
             <span class="progress-precents">0%</span>
-            <span class="progress-animation"></span>
+            <span class="progress-bar"></span>
         </div>
         <div class="quiz__left-question-buttons">
             <div class="quiz__left-question-button-back js-prev-question disabled">
@@ -103,10 +118,11 @@ async function set_answers() {
             <div class="quiz__left-question-button-next js-next-question">Далее
                 <svg viewBox="0 0 24 24" class="mdi-icon mdi-24px"><title>mdi-arrow-right</title><path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" stroke-width="0" fill-rule="nonzero"></path></svg>
             </div>
+            <div class="quiz__left-question-button-next js-last-question" style="display: none">Завершить
+            </div>
         </div>
     </div>
   `
-
   questions_block.innerHTML = template
   if_checked()
   questions_rout()
@@ -148,8 +164,11 @@ function page_rout(rout) {
 function questions_toggle(question) {
   const questions = document.querySelectorAll('.js-question')
   const question_counter = document.querySelector('.js-question-counter')
+  const precents_counter = document.querySelector('.progress-precents')
+  const progress_bar = document.querySelector('.progress-bar')
+  const discount = document.querySelector('.discount-precent')
   questions.forEach(q => {
-    if (q.dataset.question === question) {
+    if (q.dataset.question === question && question) {
       q.classList.add('show')
       q.classList.remove('hide')
     } else {
@@ -157,6 +176,12 @@ function questions_toggle(question) {
       q.classList.add('hide')
     }
   })
+  
+  const current_procents = 100 / (+question_counter.dataset.questionsLength) * (+question - 1)
+
+  discount.innerHTML = +question_counter.dataset.discount / (+question_counter.dataset.questionsLength) * (+question - 1)
+  precents_counter.innerHTML = current_procents + '%'
+  progress_bar.style.width = "calc(" + current_procents + "% - 20px)"
   question_counter.dataset.currentQuestion = question
   selected_check()
 }
@@ -164,23 +189,37 @@ function questions_toggle(question) {
 function questions_rout() {
   const next_question = document.querySelector('.js-next-question')
   const prev_question = document.querySelector('.js-prev-question')
+  const last_question = document.querySelector('.js-last-question')
   const counter = document.querySelector('.js-question-counter')
 
-  function prev_disabled_check() {
+  function disabled_check() {
     +counter.dataset.currentQuestion === 1 ?
-    prev_question.classList.add('disabled') :
-    prev_question.classList.remove('disabled')
+      prev_question.classList.add('disabled') :
+      prev_question.classList.remove('disabled')
+
+    if (counter.dataset.currentQuestion === counter.dataset.questionsLength) {
+      next_question.style.display = "none"
+      last_question.style.display = "flex"
+    }
+    else {
+      next_question.style.display = "flex"
+      last_question.style.display = "none"    
+    }
   }
 
+
+  last_question.onclick = () => {
+    page_rout("form")
+  }
   next_question.onclick = () => {
     const next_question_number = +counter.dataset.currentQuestion + 1
     questions_toggle(String(next_question_number))
-    prev_disabled_check()
+    disabled_check()
   }
   prev_question.onclick = () => {
     const next_question_number = +counter.dataset.currentQuestion - 1
     questions_toggle(String(next_question_number))
-    prev_disabled_check()
+    disabled_check()
   }
 
 }
@@ -189,6 +228,7 @@ function selected_check() {
   const questions = document.querySelectorAll('.js-question')
   const counter = document.querySelector('.js-question-counter')
   const next_question = document.querySelector('.js-next-question')
+  const last_question = document.querySelector('.js-last-question')
   let disabled = false
 
   questions.forEach(q => {
@@ -205,18 +245,76 @@ function selected_check() {
   disabled ?
     next_question.classList.remove('disabled') :
     next_question.classList.add('disabled')
+  disabled ?
+    last_question.classList.remove('disabled') :
+    last_question.classList.add('disabled')
 }
 
 function inputs_click() {
   const inputs = document.querySelectorAll('.js-questions-block input')
-  console.log(inputs)
+  const next_question = document.querySelector('.js-next-question')
+  const last_question = document.querySelector('.js-last-question')
+  const counter = document.querySelector('.js-question-counter')
+
   inputs.forEach(i => {
-    i.onclick = () => {
-      selected_check()
+    if (i.type === 'radio') {
+      i.onclick = () => {
+        setTimeout(() => {
+          selected_check()
+          counter.dataset.questionsLength == counter.dataset.currentQuestion ?
+            last_question.click() :
+            next_question.click()
+        }, 250)
+      }
+    }
+    else {
+      i.onclick = () => {
+        setTimeout(() => {
+          selected_check()
+        }, 250)
+      }
     }
   })
 }
 
+function maskPhone(selector, masked = '+7 (___) ___-__-__') {
+	const elems = document.querySelectorAll(selector);
+
+	function mask(event) {
+		const keyCode = event.keyCode;
+		const template = masked,
+			def = template.replace(/\D/g, ""),
+			val = this.value.replace(/\D/g, "");
+		console.log(template);
+		let i = 0,
+			newValue = template.replace(/[_\d]/g, function (a) {
+				return i < val.length ? val.charAt(i++) || def.charAt(i) : a;
+			});
+		i = newValue.indexOf("_");
+		if (i !== -1) {
+			newValue = newValue.slice(0, i);
+		}
+		let reg = template.substr(0, this.value.length).replace(/_+/g,
+			function (a) {
+				return "\\d{1," + a.length + "}";
+			}).replace(/[+()]/g, "\\$&");
+		reg = new RegExp("^" + reg + "$");
+		if (!reg.test(this.value) || this.value.length < 5 || keyCode > 47 && keyCode < 58) {
+			this.value = newValue;
+		}
+		if (event.type === "blur" && this.value.length < 5) {
+			this.value = "";
+		}
+
+	}
+
+	for (const elem of elems) {
+		elem.addEventListener("input", mask);
+		elem.addEventListener("focus", mask);
+		elem.addEventListener("blur", mask);
+	}
+	
+}
 
 // routes
 const questions_page = document.querySelectorAll('.js-go-questions')
@@ -232,3 +330,4 @@ questions_page.forEach(rout => {
 if_checked()
 page_hide_onload()
 set_answers()
+maskPhone('.js-phone-mask')
