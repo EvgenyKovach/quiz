@@ -1,12 +1,14 @@
 const quiz = document.querySelector('.js-quiz')
-const overlay = document.querySelector('.js-quiz-overlay')
+const close_quiz_click = document.querySelectorAll('.js-close-quiz')
 setTimeout(() => {
   quiz.classList.add('show')
 }, 1500)
 
-overlay.onclick = () => {
-  close_quiz()
-}
+close_quiz_click.forEach(c => {
+  c.onclick = () => {
+    close_quiz()
+  }
+})
 
 function close_quiz() {
   const quiz = document.querySelector('.js-quiz')
@@ -55,7 +57,7 @@ async function set_answers() {
       q.answers.forEach(answer => {
         labels += `
           <label class="quiz__left-question-form-field radio">
-              <input name="${q.question_id}" type="radio" value="${answer.title}">
+              <input name="${q.question_id}" type="radio" value="${answer.title}" data-question="${q.question}">
               ${answer.title}
               <span></span>
           </label>
@@ -79,7 +81,7 @@ async function set_answers() {
       q.answers.forEach(answer => {
         labels += `
           <label class="quiz__left-question-form-field checkbox">
-              <input name="${q.question_id}" type="checkbox" value="${answer.title}">
+              <input name="${q.question_id}" type="checkbox" value="${answer.title}" data-question="${q.question}">
               ${answer.title}
               <span></span>
           </label>
