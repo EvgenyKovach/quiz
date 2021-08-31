@@ -1,3 +1,6 @@
+const request_get = './local_base.json'
+const request_post = './answer-quiz.json'
+
 const quiz = document.querySelector('.js-quiz')
 const close_quiz_click = document.querySelectorAll('.js-close-quiz')
 setTimeout(() => {
@@ -38,7 +41,7 @@ function if_checked() {
 
 async function get_answers() {
   let answers;
-  await axios.get('/get-quiz/')
+  await axios.get(request_get)
     .then(r => r.data)
     .then(json => answers = json)
 
@@ -367,7 +370,7 @@ function serialize_form() {
 }
 
 async function send_data() {
-  const request = await axios.post('/answer-quiz', serialize_form())
+  const request = await axios.post(request_post, serialize_form())
     .then(r => {
       if (r.data.status === 'ok') {
         page_rout('success')
