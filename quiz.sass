@@ -19,9 +19,13 @@ $mobile: 650px
     transition: .2s ease-in-out
     transform: scale(1.2) translateY(-5%)
     overflow: hidden
+    pointer-events: none
+    z-index: 25
+
     &.show
         opacity: 1
         transform: scale(1)
+        pointer-events: auto
 
     
 
@@ -54,6 +58,7 @@ $mobile: 650px
         height: 100%
 
         &--promo
+            min-height: 100px
             grid-template-columns: 58% 42%
 
             @include below($tablet)
@@ -62,11 +67,18 @@ $mobile: 650px
         &--question
             grid-template-columns: 80% 20%
 
+            @include below($tablet)
+                grid-template-columns: 1fr 250px
+
+            @include below($mobile)
+                grid-template-columns: 1fr
+                grid-template-rows: 1fr auto
+
     &__overlay
         position: fixed
         width: 100%
         height: 100%
-        background: #00000022
+        background: #000000f5
         z-index: 10
 
     &__close-btn
@@ -80,6 +92,10 @@ $mobile: 650px
         color: $current_dark
         cursor: pointer
 
+        @include below($notebook)
+            right: 0px
+            top: 0px
+
         &::before,
         &::after
             content: ""
@@ -87,10 +103,11 @@ $mobile: 650px
             left: 50%
             top: 50%
             transform: translate(-50%, -50%)
-            width: 20px
+            width: 12px
             height: 2px
             background: $current_dark
             cursor: pointer
+            z-index: 1
 
         &::before
             transform: translate(-50%, -50%) rotate(45deg)
@@ -100,6 +117,9 @@ $mobile: 650px
     &__left-promo
         background: url('img/img.jpg') center/cover no-repeat
 
+        @include below($tablet)
+            border-bottom: 1px solid $current_dark
+
     &__left-question
         position: relative
         display: flex
@@ -108,12 +128,19 @@ $mobile: 650px
         padding-bottom: 25px
         overflow: hidden
 
+        @include below($mobile)
+            padding: 15px
+            padding-bottom: 25px
+
     &__left-question-box
         position: absolute
         width: calc(100% - 60px)
 
         transition: .4s ease-in-out
         transform: translateX(5%)
+
+        @include below($mobile)
+            width: calc(100% - 30px)
 
         &.show
             opacity: 1
@@ -135,6 +162,9 @@ $mobile: 650px
         padding-top: 25px
         margin-top: auto
 
+        @include below($mobile)
+            padding-top: 10px
+
         &::before
             position: absolute
             content: ''
@@ -144,10 +174,16 @@ $mobile: 650px
             height: 1px
             background: $current_white
 
+        @include below($tablet)
+            flex-direction: column
+
     &__left-question-progress-info
         position: relative
         width: 100%
         font-size: 14px
+
+        @include below($tablet)
+            order: 1
 
         &::after
             position: absolute
@@ -158,6 +194,11 @@ $mobile: 650px
             height: 5px
             background: $current_white
             border-radius: 5px
+
+            @include below($tablet)
+                width: 100%
+                bottom: -20px
+                height: 10px
 
         & .progress-bar
             position: absolute
@@ -171,6 +212,10 @@ $mobile: 650px
             border-radius: 5px
             z-index: 1
             transition: .2s ease-in-out
+
+            @include below($tablet)
+                bottom: -20px
+                height: 10px
 
             &:after
                 content: ""
@@ -209,6 +254,13 @@ $mobile: 650px
         align-items: center
         grid-gap: 0 20px
         width: 28%
+
+        @include below($tablet)
+            width: 100%
+            margin-bottom: 15px
+        
+        @include below($mobile)
+            margin-bottom: 10px
 
     &__left-question-button-next
         position: relative
@@ -279,12 +331,18 @@ $mobile: 650px
         font-size: 28px
         color: $current_dark
 
+        @include below($mobile)
+            font-size: 20px
+
     &__left-question-form
         display: grid
         grid-template-columns: 1fr 1fr
         grid-gap: 15px 20px
         width: 100%
         margin-top: 20px
+
+        @include below($tablet)
+            grid-template-columns: 1fr
 
     &__left-question-form-field
         position: relative
@@ -296,6 +354,9 @@ $mobile: 650px
         font-weight: 400
         cursor: pointer
         transition: .15s ease-in
+
+        @include below($mobile)
+            padding: .65rem .5rem .65rem 45px
         
         &:hover 
             box-shadow: 1px 1px 7px $current_white
@@ -380,12 +441,19 @@ $mobile: 650px
         @include below($tablet)
             max-width: 450px
             align-items: center
-            margin: 0 auto
+            margin: 150px auto 0
+            justify-content: flex-start
+
+        @include below($mobile)
+            margin: 50px auto 0
 
     &__right-question
         padding: 1rem 1.2rem 0
         padding-bottom: 15px
         background: #F7F7F7
+
+        @include below($mobile)
+            padding: .5rem .6rem 0
 
     &__right-title
         position: relative
@@ -399,6 +467,12 @@ $mobile: 650px
         line-height: 1.2
         letter-spacing: normal
 
+        @include below($tablet)
+            text-align: center
+
+        @include below($mobile)
+            font-size: 22px
+
         &::before
             position: absolute
             content: ''
@@ -408,6 +482,10 @@ $mobile: 650px
             height: 3px
 
             background: $current_dark
+
+            @include below($tablet)
+                left: 50%
+                transform: translateX(-50%)
 
 
     &__right-btn-start
@@ -441,6 +519,10 @@ $mobile: 650px
         border-radius: 5px
         font-weight: 700
         font-size: 13px
+
+        @include below($mobile)
+            height: 33px
+            margin-bottom: 3px
         
     &__right-discount-total
         position: relative
@@ -449,12 +531,23 @@ $mobile: 650px
     margin: 0 auto
     margin-top: 1.7rem
 
+    @include below($mobile)
+        margin-top: 0
+        display: flex
+        justify-content: center
+        flex-direction: column
+
     &__title
         max-width: 630px
         color: $current_dark
         text-align: center
         font-size: 28px
         font-weight: 500
+
+        @include below($mobile)
+            max-width: 300px
+            margin: 0px auto 10px
+            font-size: 22px
 
     &__form
         display: grid
@@ -469,9 +562,30 @@ $mobile: 650px
         width: 100%
         margin: 55px auto 0
 
+        @include below($mobile)
+            margin: 25px auto 0
+            padding: 20px 20px 30px
+            width: auto
+
+        
+    &__field
+        .error-span
+            display: none
+            font-size: 12px
+            color: #ff0000
+
+        &.error
+            .error-span
+                display: block
+
+            label
+                border-color: #f00
+            
+
     &__field-text
         text-transform: uppercase
         font-size: 12px
+
 
     &__label
         position: relative
@@ -629,7 +743,14 @@ $mobile: 650px
             transition-delay: .05s
             width: 5px
     
-        
+.success
+    max-width: 300px
+    margin: auto
+    text-align: center
+
+    .quiz__right-discount
+        margin-top: 15px
+        padding: 5px 15px !important
 
 .disclaimer
     display: inline-flex

@@ -38,7 +38,7 @@ function if_checked() {
 
 async function get_answers() {
   let answers;
-  await axios.get('./local_base.json')
+  await axios.get('/get-quiz/')
     .then(r => r.data)
     .then(json => answers = json)
 
@@ -47,11 +47,12 @@ async function get_answers() {
 
 async function set_answers() {
   const questions_block = document.querySelector('.js-questions-block')
+  const discount_form = document.querySelectorAll('.js-discount-form')
   let template = ''
   const request = await get_answers()
     .then(r => r)
 
-  request.answers.forEach(q => {
+  request.quiz.forEach(q => {
     if (q.answer_type === 'radio') {
       let labels = ''
       q.answers.forEach(answer => {
@@ -64,7 +65,7 @@ async function set_answers() {
         `
       })
       template += `
-        <div class="quiz__left-question-box js-question checkbox hide" data-question="${q.question_id}">
+        <div class="quiz__left-question-box js-question hide" data-question="${q.question_id}">
           <div class="quiz__left-question-text">
               ${q.question}
           </div>
@@ -97,7 +98,7 @@ async function set_answers() {
               Можно выбрать несколько вариантов
           </div>
           <div class="quiz__left-question-answers">
-              <div class="quiz__left-question-form">
+              <div class="quiz__left-question-form form_checkboxes" data-question="${q.question}" data-question-text="${q.question}">
                   ${labels}
               </div>
           </div>
@@ -107,7 +108,7 @@ async function set_answers() {
   })
 
   template += `
-    <div class="quiz__left-question-progress js-question-counter" data-questions-length="${request.answers.length}" data-discount="${request.discount}">
+    <div class="quiz__left-question-progress js-question-counter" data-questions-length="${request.quiz.length}" data-discount="${request.discount}">
         <div class="quiz__left-question-progress-info">
             <span class="progress-title">Готово:</span>
             <span class="progress-precents">0%</span>
@@ -125,6 +126,10 @@ async function set_answers() {
         </div>
     </div>
   `
+  discount_form.forEach(d => {
+    d.innerHTML = request.discount
+  })
+
   questions_block.innerHTML = template
   if_checked()
   questions_rout()
@@ -318,6 +323,71 @@ function maskPhone(selector, masked = '+7 (___) ___-__-__') {
 	
 }
 
+function quiz_form_errors() {
+  const fields = document.querySelectorAll('.quiz-form__field.form-element')
+
+  fields.forEach(field => {
+    field.onclick = () => {
+      field.classList.remove('error')
+    }
+  })
+
+}
+
+function serialize_form() {
+  let form_data = {
+    name: '',
+    phone: '',
+    comment: []
+  }
+
+  const radios = document.querySelectorAll("input[type='radio']")
+  const checkboxes = document.querySelectorAll(".form_checkboxes")
+  const name = document.querySelector('.quiz-form__name-input')
+  const phone = document.querySelector('.quiz-form__phone-input')
+  radios.forEach(r => {
+    r.checked ?
+      form_data.comment += r.dataset.question + '\r\n' + r.value + "\r\n-- \r\n" :
+      ''
+  })
+  checkboxes.forEach(c => {
+    form_data.comment += c.dataset.questionText + '\r\n'
+    c.querySelectorAll('input').forEach(i => {
+       if (i.checked) {
+        form_data.comment += i.value + '\r\n'
+       }
+    })
+    form_data.comment += "\r\n-- \r\n"
+  })
+
+  form_data.name = name.value
+  form_data.phone = phone.value
+
+  return form_data
+}
+
+async function send_data() {
+  const request = await axios.post('/answer-quiz', serialize_form())
+    .then(r => {
+      if (r.data.status === 'ok') {
+        page_rout('success')
+      }
+      else {
+        const fields = document.querySelectorAll('.quiz-form__field.form-element')
+
+        fields.forEach(field => {
+          field.classList.add('error')
+        })
+      }
+    })
+}
+
+const form_submit = document.querySelector('.js-form_submit')
+
+form_submit.onclick = () => {
+  send_data()
+}
+
 // routes
 const questions_page = document.querySelectorAll('.js-go-questions')
 questions_page.forEach(rout => {
@@ -333,3 +403,4 @@ if_checked()
 page_hide_onload()
 set_answers()
 maskPhone('.js-phone-mask')
+quiz_form_errors()

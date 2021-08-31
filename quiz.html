@@ -107,26 +107,28 @@
                         <span class="quiz-form__discount-text">
                             Ваша скидка
                         </span>
-                        <span class="quiz-form__discount-precents js-form-discount-precents">
-                            20%
+                        <span class="quiz-form__discount-precents">
+                            <span class="js-discount-form"></span>%
                         </span>
                     </div>
-                    <div class="quiz-form__field">
+                    <div class="quiz-form__field form-element" data-form-name="name">
                         <span class="quiz-form__field-text">Введите имя</span>
-                        <label class="quiz-form__label">
+                        <label class="quiz-form__label error">
                             <svg viewBox="0 0 24 24" class="mdi-icon mdi-36px"><title>mdi-account</title><path d="M12,4C14.21,4 16,5.79 16,8C16,10.21 14.21,12 12,12C9.79,12 8,10.21 8,8C8,5.79 9.79,4 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" stroke-width="0" fill-rule="nonzero"></path></svg>
-                            <input required class="quiz-form__input" type="text" placeholder="Имя *">
+                            <input required class="quiz-form__input quiz-form__name-input" type="text" placeholder="Имя *">
                         </label>
+                        <span class="error-span">Обязательно поле</span>
                     </div>
-                    <div class="quiz-form__field">
+                    <div class="quiz-form__field form-element" data-form-name="phone">
                         <span class="quiz-form__field-text">Введите телефон</span>
                         <label class="quiz-form__label">
                             <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="phone-alt" class="svg-inline--fa fa-phone-alt fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M497.39 361.8l-112-48a24 24 0 0 0-28 6.9l-49.6 60.6A370.66 370.66 0 0 1 130.6 204.11l60.6-49.6a23.94 23.94 0 0 0 6.9-28l-48-112A24.16 24.16 0 0 0 122.6.61l-104 24A24 24 0 0 0 0 48c0 256.5 207.9 464 464 464a24 24 0 0 0 23.4-18.6l24-104a24.29 24.29 0 0 0-14.01-27.6z"></path></svg>
-                            <input required class="quiz-form__input js-phone-mask" type="text" placeholder="Номер телефона *">
+                            <input required class="quiz-form__input js-phone-mask quiz-form__phone-input" type="text" placeholder="Номер телефона *">
                         </label>
+                        <span class="error-span">Обязательно поле</span>
                     </div>
                     <div class="quiz-form__field shine big-shine">
-                        <button class="quiz-form__submit">
+                        <button class="quiz-form__submit js-form_submit">
                             <svg viewBox="0 0 24 24" class="mdi-icon mdi-24px"><title>mdi-checkbox-marked-circle-outline</title><path d="M20,12C20,16.42 16.42,20 12,20C7.58,20 4,16.42 4,12C4,7.58 7.58,4 12,4C12.76,4 13.5,4.11 14.2,4.31L15.77,2.74C14.61,2.26 13.34,2 12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12M7.91,10.08L6.5,11.5L11,16L21,6L19.59,4.58L11,13.17L7.91,10.08Z" stroke-width="0" fill-rule="nonzero"></path></svg>
                             Получить скидку
                         </button>
@@ -145,6 +147,25 @@
                     </div>
                 </div>
             </div>
+        </section>
+        <section class="quiz js-page" data-page="success">
+            <div class="success">
+                <div class="js-success-text">
+                    Спасибо за ответы, наши менеджеры свяжутся с Вами в рабочее время.
+                </div>
+                <div class="quiz__right-discount">
+                <div class="quiz__right-discount-text">
+                    Ваша скидка
+                </div>
+                <div class="quiz__right-discount-total">
+                    <span class="discount-precent js-discount-form">0</span> %
+                    <span class="discount-arrow">
+                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" class="arrow"><path d="M5 3.70904e-07L0.757355 4.24265L2.17157 5.65686L5 2.82843L7.82843 5.65686L9.24265 4.24265L5 3.70904e-07Z" fill="#44bc75"></path><path d="M5 4L0.757355 8.24265L2.17157 9.65686L5 6.82843L7.82843 9.65686L9.24265 8.24265L5 4Z" fill="#44bc75"></path></svg>
+                    </span>
+                </div>
+            </div>
+            </div>
+            
         </section>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

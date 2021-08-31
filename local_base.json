@@ -1,5 +1,5 @@
 {
-  "answers": [
+  "quiz": [
     {
       "question": "Для кого Вы ищете занятия?", 
       "answer_type": "radio", 
@@ -40,5 +40,5 @@
       "question_id": 4
     }
   ],
-  "discount": "20"
+  "discount": "25"
 }
