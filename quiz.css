@@ -653,6 +653,14 @@
   border: none;
   cursor: pointer;
 }
+.quiz-form__submit.disabled {
+  background-color: #363636;
+  pointer-events: none;
+}
+.quiz-form__submit.disabled:after {
+  -webkit-animation: none !important;
+          animation: none !important;
+}
 .quiz-form__submit svg {
   width: 20px;
   height: 20px;

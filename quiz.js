@@ -141,7 +141,7 @@ async function set_answers() {
 
 function page_hide_onload() {
   const pages = document.querySelectorAll('.js-page')
-  
+
   pages.forEach(page => {
     if (page.dataset.page === 'promo') {
       page.classList.add('show')
@@ -157,7 +157,7 @@ function page_hide_onload() {
 
 function page_rout(rout) {
   const pages = document.querySelectorAll('.js-page')
-  
+
   pages.forEach(page => {
     if (page.dataset.page === rout) {
       page.classList.add('show')
@@ -186,10 +186,10 @@ function questions_toggle(question) {
       q.classList.add('hide')
     }
   })
-  
+
   const current_procents = 100 / (+question_counter.dataset.questionsLength) * (+question - 1)
 
-  discount.innerHTML = +question_counter.dataset.discount / (+question_counter.dataset.questionsLength) * (+question - 1)
+  discount.innerHTML = (+question_counter.dataset.discount / (+question_counter.dataset.questionsLength) * (+question - 1)).toFixed(1)
   precents_counter.innerHTML = current_procents + '%'
   progress_bar.style.width = "calc(" + current_procents + "% - 20px)"
   question_counter.dataset.currentQuestion = question
@@ -213,7 +213,7 @@ function questions_rout() {
     }
     else {
       next_question.style.display = "flex"
-      last_question.style.display = "none"    
+      last_question.style.display = "none"
     }
   }
 
@@ -295,7 +295,7 @@ function maskPhone(selector, masked = '+7 (___) ___-__-__') {
 		const template = masked,
 			def = template.replace(/\D/g, ""),
 			val = this.value.replace(/\D/g, "");
-		console.log(template);
+
 		let i = 0,
 			newValue = template.replace(/[_\d]/g, function (a) {
 				return i < val.length ? val.charAt(i++) || def.charAt(i) : a;
@@ -323,7 +323,7 @@ function maskPhone(selector, masked = '+7 (___) ___-__-__') {
 		elem.addEventListener("focus", mask);
 		elem.addEventListener("blur", mask);
 	}
-	
+
 }
 
 function quiz_form_errors() {
@@ -338,11 +338,10 @@ function quiz_form_errors() {
 }
 
 function serialize_form() {
-  let form_data = {
-    name: '',
-    phone: '',
-    comment: []
-  }
+  let form_data = new FormData()
+  let form_comment = ''
+  let form_name = ''
+  let form_phone = ''
 
   const radios = document.querySelectorAll("input[type='radio']")
   const checkboxes = document.querySelectorAll(".form_checkboxes")
@@ -350,37 +349,45 @@ function serialize_form() {
   const phone = document.querySelector('.quiz-form__phone-input')
   radios.forEach(r => {
     r.checked ?
-      form_data.comment += r.dataset.question + '\r\n' + r.value + "\r\n-- \r\n" :
+      form_comment += r.dataset.question + '\r\n' + r.value + "\r\n-- \r\n" :
       ''
   })
   checkboxes.forEach(c => {
-    form_data.comment += c.dataset.questionText + '\r\n'
+    form_comment += c.dataset.questionText + '\r\n'
     c.querySelectorAll('input').forEach(i => {
        if (i.checked) {
-        form_data.comment += i.value + '\r\n'
+        form_comment += i.value + '\r\n'
        }
     })
-    form_data.comment += "\r\n-- \r\n"
+    form_comment += "-- \r\n"
   })
 
-  form_data.name = name.value
-  form_data.phone = phone.value
+  form_name = name.value
+  form_phone = phone.value
+
+  form_data.append('name', form_name)
+  form_data.append('phone', form_phone)
+  form_data.append('comment', form_comment)
 
   return form_data
 }
 
-async function send_data() {
+async function send_form() {
   const request = await axios.post(request_post, serialize_form())
     .then(r => {
       if (r.data.status === 'ok') {
         page_rout('success')
+        r.data.message !== '' ?
+          document.querySelector('.js-success-text').innerHTML = r.data.message :
+          ''
       }
-      else {
-        const fields = document.querySelectorAll('.quiz-form__field.form-element')
-
-        fields.forEach(field => {
-          field.classList.add('error')
-        })
+      else if (r.data.status === 'error') {
+        const fields_name = document.querySelector('.quiz-form__field.form-element.name')
+        const fields_phone = document.querySelector('.quiz-form__field.form-element.phone')
+        for (let message in r.data.message) {
+          message === 'name' ? fields_name.classList.add('error') : ''
+          message === 'phone' ? fields_phone.classList.add('error') : ''
+        }
       }
     })
 }
@@ -388,7 +395,30 @@ async function send_data() {
 const form_submit = document.querySelector('.js-form_submit')
 
 form_submit.onclick = () => {
-  send_data()
+  const name = document.querySelector('.quiz-form__name-input')
+  const phone = document.querySelector('.quiz-form__phone-input')
+  const fields_name = document.querySelector('.quiz-form__field.form-element.name')
+  const fields_phone = document.querySelector('.quiz-form__field.form-element.phone')
+  name.value !== '' ? fields_name.classList.add('error') : ''
+  phone.value !== '' ? fields_phone.classList.add('error') : ''
+  name.value !== '' && phone.value !== '' ? send_form() : ''
+}
+
+function form_private_disable() {
+  const checkbox = document.querySelector('.js-private-checkbox')
+  const submit = document.querySelector('.js-form_submit')
+
+  function check () {
+    !checkbox.checked ?
+      submit.classList.add('disabled') :
+      submit.classList.remove('disabled')
+  }
+
+  check()
+
+  checkbox.onchange = () => {
+    check()
+  }
 }
 
 // routes
@@ -407,3 +437,4 @@ page_hide_onload()
 set_answers()
 maskPhone('.js-phone-mask')
 quiz_form_errors()
+form_private_disable()

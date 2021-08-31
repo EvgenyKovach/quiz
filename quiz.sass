@@ -27,9 +27,9 @@ $mobile: 650px
         transform: scale(1)
         pointer-events: auto
 
-    
 
-.quiz 
+
+.quiz
     position: fixed
 
     display: flex
@@ -208,7 +208,7 @@ $mobile: 650px
             width: calc(0% - 220px)
             height: 5px
             background-image: linear-gradient(90deg, $current_color_opacity, $current_color)
-            box-shadow: 0 2px 9px rgb(109 109 109 / 39%), inset 0 2px 9px rgb(109 109 109 / 39%)
+            box-shadow: 0 2px 9px rgba(109, 109, 109, .39), inset 0 2px 9px rgba(109, 109, 109, .39)
             border-radius: 5px
             z-index: 1
             transition: .2s ease-in-out
@@ -248,7 +248,7 @@ $mobile: 650px
             color: $current_color
             font-weight: 700
             margin-left: 10px
-    
+
     &__left-question-buttons
         display: flex
         align-items: center
@@ -258,7 +258,7 @@ $mobile: 650px
         @include below($tablet)
             width: 100%
             margin-bottom: 15px
-        
+
         @include below($mobile)
             margin-bottom: 10px
 
@@ -357,10 +357,10 @@ $mobile: 650px
 
         @include below($mobile)
             padding: .65rem .5rem .65rem 45px
-        
-        &:hover 
+
+        &:hover
             box-shadow: 1px 1px 7px $current_white
-        
+
         &.checked
             border: 1px solid $current_color_opacity
 
@@ -386,7 +386,7 @@ $mobile: 650px
             background: $current_color
             box-shadow: 0 0 0 2px $current_color
 
-        &.checkbox 
+        &.checkbox
             span
                 border-radius: 2px
 
@@ -406,7 +406,7 @@ $mobile: 650px
                     transform: translate(-50%, 50%) rotate(43deg)
                     left: 20%
                     top: 60%
-			
+
                 &:before
                     width: 0px
                     left: 63%
@@ -426,14 +426,14 @@ $mobile: 650px
                 transition-delay: .05s
                 width: 5px
 
-    
+
 
     &__right
         display: flex
         flex-direction: column
         justify-content: center
         align-items: flex-start
-        
+
         height: 100%
         padding: 1rem 2rem
         margin-top: -35px
@@ -523,7 +523,7 @@ $mobile: 650px
         @include below($mobile)
             height: 33px
             margin-bottom: 3px
-        
+
     &__right-discount-total
         position: relative
 
@@ -567,7 +567,7 @@ $mobile: 650px
             padding: 20px 20px 30px
             width: auto
 
-        
+
     &__field
         .error-span
             display: none
@@ -580,7 +580,7 @@ $mobile: 650px
 
             label
                 border-color: #f00
-            
+
 
     &__field-text
         text-transform: uppercase
@@ -594,7 +594,7 @@ $mobile: 650px
 
         margin-top: 10px
         padding: 15px 20px
-        
+
         border: 1px solid #B3B3B3
         border-radius: 5px
 
@@ -625,6 +625,12 @@ $mobile: 650px
         border: none
         cursor: pointer
 
+        &.disabled
+          background-color: $current_dark
+          pointer-events: none
+          &:after
+            animation: none !important
+
         svg
             width: 20px
             height: 20px
@@ -652,8 +658,8 @@ $mobile: 650px
         padding-left: 5px
         background: #F7CD47
         font-weight: 600
-        
-        &::before 
+
+        &::before
             content: ""
             position: absolute
             width: 5px
@@ -723,7 +729,7 @@ $mobile: 650px
                 transform: translate(-50%, 50%) rotate(43deg)
                 left: 20%
                 top: 60%
-        
+
             &:before
                 width: 0px
                 left: 63%
@@ -742,7 +748,7 @@ $mobile: 650px
         input:checked + .custom-checkbox::after
             transition-delay: .05s
             width: 5px
-    
+
 .success
     max-width: 300px
     margin: auto
