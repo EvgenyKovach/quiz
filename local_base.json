@@ -29,16 +29,7 @@
         {"title": "Общая физическая подготовка"}
       ],
       "question_id": 3
-    },
-    {
-      "question": "Цель занятий", 
-      "answer_type": "radio", 
-      "answers": [
-        {"title": "Профессиональный спорт"},
-        {"title": "Хобби"}
-      ],
-      "question_id": 4
     }
   ],
-  "discount": "25"
+  "discount": "23"
 }

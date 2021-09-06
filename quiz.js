@@ -1,18 +1,3 @@
-const request_get = './local_base.json'
-const request_post = './answer-quiz.json'
-
-const quiz = document.querySelector('.js-quiz')
-const close_quiz_click = document.querySelectorAll('.js-close-quiz')
-setTimeout(() => {
-  quiz.classList.add('show')
-}, 1500)
-
-close_quiz_click.forEach(c => {
-  c.onclick = () => {
-    close_quiz()
-  }
-})
-
 function close_quiz() {
   const quiz = document.querySelector('.js-quiz')
   quiz.classList.remove('show')
@@ -40,11 +25,8 @@ function if_checked() {
 }
 
 async function get_answers() {
-  let answers;
-  await axios.get(request_get)
-    .then(r => r.data)
-    .then(json => answers = json)
-
+  let answers  = await fetch(request_get)
+    .then(r => r.json())
   return answers
 }
 
@@ -55,21 +37,34 @@ async function set_answers() {
   const request = await get_answers()
     .then(r => r)
 
+  let count = 0
+
   request.quiz.forEach(q => {
+    count++;
     if (q.answer_type === 'radio') {
       let labels = ''
       q.answers.forEach(answer => {
         labels += `
           <label class="quiz__left-question-form-field radio">
-              <input name="${q.question_id}" type="radio" value="${answer.title}" data-question="${q.question}">
+              <input name="${q.question_id}" 
+                      type="radio" 
+                      value="${answer.title}" 
+                      data-order="${count}"
+                      data-question="${q.question}"
+              >
               ${answer.title}
               <span></span>
           </label>
         `
       })
       template += `
-        <div class="quiz__left-question-box js-question hide" data-question="${q.question_id}">
-          <div class="quiz__left-question-text">
+        <div 
+            class="quiz__left-question-box js-question hide" 
+            data-question="${q.question_id}"
+        >
+          <div 
+            class="quiz__left-question-text"
+          >
               ${q.question}
           </div>
           <div class="quiz__left-question-answers">
@@ -77,6 +72,7 @@ async function set_answers() {
                   ${labels}
               </div>
           </div>
+
       </div>
       `
     }
@@ -85,15 +81,26 @@ async function set_answers() {
       q.answers.forEach(answer => {
         labels += `
           <label class="quiz__left-question-form-field checkbox">
-              <input name="${q.question_id}" type="checkbox" value="${answer.title}" data-question="${q.question}">
+              <input 
+                name="${q.question_id}" 
+                type="checkbox"
+                value="${answer.title}" 
+                data-question="${q.question}"
+              >
               ${answer.title}
               <span></span>
           </label>
         `
       })
       template += `
-        <div class="quiz__left-question-box js-question hide checkbox" data-question="${q.question_id}">
-          <div class="quiz__left-question-text">
+        <div 
+          class="quiz__left-question-box js-question hide checkbox" 
+          data-question="${q.question_id}"
+          >
+          <div 
+            class="quiz__left-question-text"
+            data-order="${count}"
+          >
               ${q.question}
           </div>
           <div class="disclaimer">
@@ -101,7 +108,12 @@ async function set_answers() {
               Можно выбрать несколько вариантов
           </div>
           <div class="quiz__left-question-answers">
-              <div class="quiz__left-question-form form_checkboxes" data-question="${q.question}" data-question-text="${q.question}">
+              <div 
+                class="quiz__left-question-form form_checkboxes" 
+                data-question="${q.question}" 
+                data-question-text="${q.question}"
+                data-order="${count}"
+              >
                   ${labels}
               </div>
           </div>
@@ -141,7 +153,7 @@ async function set_answers() {
 
 function page_hide_onload() {
   const pages = document.querySelectorAll('.js-page')
-  
+
   pages.forEach(page => {
     if (page.dataset.page === 'promo') {
       page.classList.add('show')
@@ -157,7 +169,7 @@ function page_hide_onload() {
 
 function page_rout(rout) {
   const pages = document.querySelectorAll('.js-page')
-  
+
   pages.forEach(page => {
     if (page.dataset.page === rout) {
       page.classList.add('show')
@@ -186,11 +198,11 @@ function questions_toggle(question) {
       q.classList.add('hide')
     }
   })
-  
+
   const current_procents = 100 / (+question_counter.dataset.questionsLength) * (+question - 1)
 
-  discount.innerHTML = +question_counter.dataset.discount / (+question_counter.dataset.questionsLength) * (+question - 1)
-  precents_counter.innerHTML = current_procents + '%'
+  discount.innerHTML = (+question_counter.dataset.discount / (+question_counter.dataset.questionsLength) * (+question - 1)).toFixed(1)
+  precents_counter.innerHTML = current_procents.toFixed(1) + '%'
   progress_bar.style.width = "calc(" + current_procents + "% - 20px)"
   question_counter.dataset.currentQuestion = question
   selected_check()
@@ -213,7 +225,7 @@ function questions_rout() {
     }
     else {
       next_question.style.display = "flex"
-      last_question.style.display = "none"    
+      last_question.style.display = "none"
     }
   }
 
@@ -233,6 +245,9 @@ function questions_rout() {
   }
 
 }
+
+const request_get = './local_base.json'
+const request_post = './answer-quiz.json'
 
 function selected_check() {
   const questions = document.querySelectorAll('.js-question')
@@ -295,7 +310,7 @@ function maskPhone(selector, masked = '+7 (___) ___-__-__') {
 		const template = masked,
 			def = template.replace(/\D/g, ""),
 			val = this.value.replace(/\D/g, "");
-		console.log(template);
+
 		let i = 0,
 			newValue = template.replace(/[_\d]/g, function (a) {
 				return i < val.length ? val.charAt(i++) || def.charAt(i) : a;
@@ -323,7 +338,7 @@ function maskPhone(selector, masked = '+7 (___) ___-__-__') {
 		elem.addEventListener("focus", mask);
 		elem.addEventListener("blur", mask);
 	}
-	
+
 }
 
 function quiz_form_errors() {
@@ -338,49 +353,63 @@ function quiz_form_errors() {
 }
 
 function serialize_form() {
-  let form_data = {
-    name: '',
-    phone: '',
-    comment: []
-  }
+  let form_data = new FormData()
+  let not_ordered_comment = {}
+  let form_comment = ''
+  let form_name = ''
+  let form_phone = ''
 
-  const radios = document.querySelectorAll("input[type='radio']")
-  const checkboxes = document.querySelectorAll(".form_checkboxes")
+  const radios = document.querySelectorAll(".quiz input[type='radio']")
+  const checkboxes = document.querySelectorAll(".js-question .form_checkboxes")
   const name = document.querySelector('.quiz-form__name-input')
   const phone = document.querySelector('.quiz-form__phone-input')
   radios.forEach(r => {
     r.checked ?
-      form_data.comment += r.dataset.question + '\r\n' + r.value + "\r\n-- \r\n" :
+      not_ordered_comment[r.dataset.order] = r.dataset.question + '\r\n' + r.value :
       ''
   })
   checkboxes.forEach(c => {
-    form_data.comment += c.dataset.questionText + '\r\n'
+    not_ordered_comment[c.dataset.order] = c.dataset.questionText
     c.querySelectorAll('input').forEach(i => {
        if (i.checked) {
-        form_data.comment += i.value + '\r\n'
+         not_ordered_comment[c.dataset.order] += '\r\n'
+        not_ordered_comment[c.dataset.order] += i.value
        }
     })
-    form_data.comment += "\r\n-- \r\n"
   })
 
-  form_data.name = name.value
-  form_data.phone = phone.value
+  for (let order in not_ordered_comment) {
+    form_comment += not_ordered_comment[order]
+    form_comment += '\r\n--\r\n'
+  }
+
+  form_name = name.value
+  form_phone = phone.value
+
+  form_data.append('name', form_name)
+  form_data.append('phone', form_phone)
+  form_data.append('comment', form_comment)
 
   return form_data
 }
 
-async function send_data() {
-  const request = await axios.post(request_post, serialize_form())
+async function send_form() {
+  const request = await fetch(request_post, serialize_form())
+    .then(response => response.json())
     .then(r => {
-      if (r.data.status === 'ok') {
+      if (r.status === 'ok') {
         page_rout('success')
+        r.message !== '' ?
+          document.querySelector('.js-success-text').innerHTML = r.message :
+          ''
       }
-      else {
-        const fields = document.querySelectorAll('.quiz-form__field.form-element')
-
-        fields.forEach(field => {
-          field.classList.add('error')
-        })
+      else if (r.status === 'error') {
+        const fields_name = document.querySelector('.quiz-form__field.form-element.name')
+        const fields_phone = document.querySelector('.quiz-form__field.form-element.phone')
+        for (let message in r.message) {
+          message === 'name' ? fields_name.classList.add('error') : ''
+          message === 'phone' ? fields_phone.classList.add('error') : ''
+        }
       }
     })
 }
@@ -388,7 +417,31 @@ async function send_data() {
 const form_submit = document.querySelector('.js-form_submit')
 
 form_submit.onclick = () => {
-  send_data()
+  const name = document.querySelector('.quiz-form__name-input');
+  const phone = document.querySelector('.quiz-form__phone-input');
+  const fields_name = document.querySelector('.quiz-form__field.form-element.name');
+  const fields_phone = document.querySelector('.quiz-form__field.form-element.phone');
+
+  name.value === '' ? fields_name.classList.add('error') : '';
+  phone.value === '' ? fields_phone.classList.add('error') : '';
+  name.value && phone.value ? send_form() : '';
+}
+
+function form_private_disable() {
+  const checkbox = document.querySelector('.js-private-checkbox')
+  const submit = document.querySelector('.js-form_submit')
+
+  function check () {
+    !checkbox.checked ?
+      submit.classList.add('disabled') :
+      submit.classList.remove('disabled')
+  }
+
+  check()
+
+  checkbox.onchange = () => {
+    check()
+  }
 }
 
 // routes
@@ -402,8 +455,23 @@ questions_page.forEach(rout => {
 })
 
 // functions init
-if_checked()
-page_hide_onload()
-set_answers()
-maskPhone('.js-phone-mask')
-quiz_form_errors()
+window.onload = function() {
+  if_checked()
+  page_hide_onload()
+  set_answers()
+  maskPhone('.js-phone-mask')
+  quiz_form_errors()
+  form_private_disable()
+
+  const quiz = document.querySelector('.js-quiz')
+  const close_quiz_click = document.querySelectorAll('.js-close-quiz')
+  setTimeout(() => {
+    quiz.classList.add('show')
+  }, 5000)
+
+  close_quiz_click.forEach(c => {
+    c.onclick = () => {
+      close_quiz()
+    }
+  })
+}
