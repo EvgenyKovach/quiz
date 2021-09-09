@@ -354,26 +354,17 @@ function quiz_form_errors() {
 
 function serialize_form() {
   let form_data = new FormData()
-<<<<<<< HEAD
   let not_ordered_comment = {}
-=======
->>>>>>> 21b36764cc829815ceccf87f4002176df9951e22
   let form_comment = ''
   let form_name = ''
   let form_phone = ''
 
-<<<<<<< HEAD
   const radios = document.querySelectorAll(".quiz input[type='radio']")
   const checkboxes = document.querySelectorAll(".js-question .form_checkboxes")
-=======
-  const radios = document.querySelectorAll("input[type='radio']")
-  const checkboxes = document.querySelectorAll(".form_checkboxes")
->>>>>>> 21b36764cc829815ceccf87f4002176df9951e22
   const name = document.querySelector('.quiz-form__name-input')
   const phone = document.querySelector('.quiz-form__phone-input')
   radios.forEach(r => {
     r.checked ?
-<<<<<<< HEAD
       not_ordered_comment[r.dataset.order] = r.dataset.question + '\r\n' + r.value :
       ''
   })
@@ -392,21 +383,6 @@ function serialize_form() {
     form_comment += '\r\n--\r\n'
   }
 
-=======
-      form_comment += r.dataset.question + '\r\n' + r.value + "\r\n-- \r\n" :
-      ''
-  })
-  checkboxes.forEach(c => {
-    form_comment += c.dataset.questionText + '\r\n'
-    c.querySelectorAll('input').forEach(i => {
-       if (i.checked) {
-        form_comment += i.value + '\r\n'
-       }
-    })
-    form_comment += "-- \r\n"
-  })
-
->>>>>>> 21b36764cc829815ceccf87f4002176df9951e22
   form_name = name.value
   form_phone = phone.value
 
@@ -418,16 +394,11 @@ function serialize_form() {
 }
 
 async function send_form() {
-<<<<<<< HEAD
   const request = await fetch(request_post, serialize_form())
     .then(response => response.json())
-=======
-  const request = await axios.post(request_post, serialize_form())
->>>>>>> 21b36764cc829815ceccf87f4002176df9951e22
     .then(r => {
       if (r.status === 'ok') {
         page_rout('success')
-<<<<<<< HEAD
         r.message !== '' ?
           document.querySelector('.js-success-text').innerHTML = r.message :
           ''
@@ -436,16 +407,6 @@ async function send_form() {
         const fields_name = document.querySelector('.quiz-form__field.form-element.name')
         const fields_phone = document.querySelector('.quiz-form__field.form-element.phone')
         for (let message in r.message) {
-=======
-        r.data.message !== '' ?
-          document.querySelector('.js-success-text').innerHTML = r.data.message :
-          ''
-      }
-      else if (r.data.status === 'error') {
-        const fields_name = document.querySelector('.quiz-form__field.form-element.name')
-        const fields_phone = document.querySelector('.quiz-form__field.form-element.phone')
-        for (let message in r.data.message) {
->>>>>>> 21b36764cc829815ceccf87f4002176df9951e22
           message === 'name' ? fields_name.classList.add('error') : ''
           message === 'phone' ? fields_phone.classList.add('error') : ''
         }
@@ -456,7 +417,6 @@ async function send_form() {
 const form_submit = document.querySelector('.js-form_submit')
 
 form_submit.onclick = () => {
-<<<<<<< HEAD
   const name = document.querySelector('.quiz-form__name-input');
   const phone = document.querySelector('.quiz-form__phone-input');
   const fields_name = document.querySelector('.quiz-form__field.form-element.name');
@@ -465,16 +425,6 @@ form_submit.onclick = () => {
   name.value === '' ? fields_name.classList.add('error') : '';
   phone.value === '' ? fields_phone.classList.add('error') : '';
   name.value && phone.value ? send_form() : '';
-=======
-  const name = document.querySelector('.quiz-form__name-input')
-  const phone = document.querySelector('.quiz-form__phone-input')
-  const fields_name = document.querySelector('.quiz-form__field.form-element.name')
-  const fields_phone = document.querySelector('.quiz-form__field.form-element.phone')
-  name.value !== '' ? fields_name.classList.add('error') : ''
-  phone.value !== '' ? fields_phone.classList.add('error') : ''
-  name.value !== '' && phone.value !== '' ? send_form() : ''
->>>>>>> 21b36764cc829815ceccf87f4002176df9951e22
-}
 
 function form_private_disable() {
   const checkbox = document.querySelector('.js-private-checkbox')
@@ -504,7 +454,6 @@ questions_page.forEach(rout => {
 })
 
 // functions init
-<<<<<<< HEAD
 window.onload = function() {
   if_checked()
   page_hide_onload()
@@ -525,11 +474,4 @@ window.onload = function() {
     }
   })
 }
-=======
-if_checked()
-page_hide_onload()
-set_answers()
-maskPhone('.js-phone-mask')
-quiz_form_errors()
-form_private_disable()
->>>>>>> 21b36764cc829815ceccf87f4002176df9951e22
+
